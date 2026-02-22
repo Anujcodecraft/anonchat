@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AnonChat Pro | Premium Anonymous Chat</title>
+
+    <!-- Icons -->
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+
+    <!-- Main stylesheet (moved out from inline <style>) -->
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <script src="/socket.io/socket.io.js"></script>
+    <!-- Floating Particles -->
+    <div class="particles" id="particles"></div>
+
+    <!-- Main App Container -->
+    <div class="app-container">
+        <!-- Page 1: Welcome & Selection -->
+        <div class="page active" id="page1">
+            <div class="page-content">
+                <div class="welcome-animation">
+                    <div class="pulse-ring"></div>
+                    <div class="pulse-ring"></div>
+                    <div class="pulse-ring"></div>
+                    <div class="logo-center">
+                        <i class="fas fa-user-secret"></i>
+                    </div>
+                </div>
+
+                <h1 class="page-title">AnonChat Pro</h1>
+                <p class="page-subtitle">
+                    Connect with people around the world anonymously. Your privacy is our priority.
+                </p>
+
+                <div class="selection-container">
+                    <div class="selection-group">
+                        <span class="selection-label">I want to chat with</span>
+                        <div class="cards-grid">
+                            <div class="selection-card active" data-value="male">
+                                <div class="card-icon">
+                                    <i class="fas fa-mars"></i>
+                                </div>
+                                <div class="card-label">Male</div>
+                            </div>
+                            <div class="selection-card" data-value="female">
+                                <div class="card-icon">
+                                    <i class="fas fa-venus"></i>
+                                </div>
+                                <div class="card-label">Female</div>
+                            </div>
+                            <div class="selection-card" data-value="any">
+                                <div class="card-icon">
+                                    <i class="fas fa-venus-mars"></i>
+                                </div>
+                                <div class="card-label">All</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="selection-group">
+                        <span class="selection-label">I identify as</span>
+                        <div class="cards-grid">
+                            <div class="selection-card active" data-value="male">
+                                <div class="card-icon">
+                                    <i class="fas fa-male"></i>
+                                </div>
+                                <div class="card-label">Guy</div>
+                            </div>
+                            <div class="selection-card" data-value="female">
+                                <div class="card-icon">
+                                    <i class="fas fa-female"></i>
+                                </div>
+                                <div class="card-label">Girl</div>
+                            </div>
+                            <div class="selection-card" data-value="any">
+                                <div class="card-icon">
+                                    <i class="fas fa-user-astronaut"></i>
+                                </div>
+                                <div class="card-label">X Covert</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="age-check">
+                    <label class="checkbox-custom">
+                        <input type="checkbox" id="ageCheck">
+                        <div class="checkbox-design">
+                            <i class="fas fa-check"></i>
+                        </div>
+                    </label>
+                    <span class="age-text">I confirm that I am 18 years or older</span>
+                </div>
+
+                <button class="primary-btn" id="nextButton1" disabled>
+                    <i class="fas fa-lock"></i> Confirm Age to Continue
+                </button>
+
+                <div class="progress-dots">
+                    <div class="dot active"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Page 2: Security Features -->
+        <div class="page" id="page2">
+            <div class="page-content">
+                <div class="welcome-animation">
+                    <div class="pulse-ring"></div>
+                    <div class="pulse-ring"></div>
+                    <div class="pulse-ring"></div>
+                    <div class="logo-center">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                </div>
+
+                <h1 class="page-title">Your Security First</h1>
+                <p class="page-subtitle">
+                    Experience the highest level of privacy and security in anonymous chatting
+                </p>
+
+                <div class="features-grid">
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <i class="fas fa-lock"></i>
+                        </div>
+                        <h3 class="feature-title">End-to-End Encryption</h3>
+                        <p class="feature-desc">Military grade encryption for all messages</p>
+                    </div>
+
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <i class="fas fa-user-secret"></i>
+                        </div>
+                        <h3 class="feature-title">100% Anonymous</h3>
+                        <p class="feature-desc">No personal data stored or shared</p>
+                    </div>
+
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <i class="fas fa-globe"></i>
+                        </div>
+                        <h3 class="feature-title">Global Network</h3>
+                        <p class="feature-desc">Connect with people worldwide</p>
+                    </div>
+
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <i class="fas fa-bolt"></i>
+                        </div>
+                        <h3 class="feature-title">Instant Connection</h3>
+                        <p class="feature-desc">Find matches in seconds</p>
+                    </div>
+                </div>
+
+                <div class="action-buttons-group">
+                    <button class="primary-btn" id="nextButton2">
+                        <i class="fas fa-comments"></i> Start Chatting Now
+                    </button>
+                    <button class="primary-btn call-btn" id="startCallButton">
+                        <i class="fas fa-phone"></i> Start Call
+                    </button>
+                </div>
+
+                <div class="progress-dots">
+                    <div class="dot"></div>
+                    <div class="dot active"></div>
+                    <div class="dot"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Page 3: Chat Room -->
+        <div class="page" id="page3">
+            <div class="chat-header">
+                <div class="chat-logo">
+                    <div class="logo-badge">
+                        <i class="fas fa-comment-dots"></i>
+                    </div>
+                    <div class="logo-text">AnonChat Pro</div>
+                </div>
+
+                <div class="header-actions">
+                    <button class="icon-btn" id="interestsButton" title="Interests">
+                        <i class="fas fa-tags"></i>
+                    </button>
+                    <button class="icon-btn" id="menuButton" title="Menu">
+                        <i class="fas fa-ellipsis-v"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="chat-area" id="chatArea">
+                <!-- Chat messages will be injected here by app.js -->
+            </div>
+
+            <!-- Full Call View (hidden by default) -->
+            <div class="full-call-view" id="fullCallView" style="display: none;">
+                <div class="call-header">
+                    <div class="call-user-info">
+                        <div class="call-avatar" id="callAvatar">A</div>
+                        <div class="call-user-details">
+                            <h3 id="callPartnerName">Partner</h3>
+                            <div class="call-user-location">
+                                <span class="flag">🌍</span>
+                                <span id="callPartnerCountry">Unknown</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="call-status">
+                        <div class="call-timer">
+                            <span id="callTimer">00:00</span>
+                            <button class="call-minimize-btn" id="callMinimizeBtn" title="Minimize">
+                                <i class="fas fa-window-minimize"></i>
+                            </button>
+                        </div>
+                        <div class="status-badge">CONNECTED</div>
+                    </div>
+                </div>
+                
+                <!-- Video Container -->
+                <div class="video-container">
+                    <div class="video-placeholder">
+                        <i class="fas fa-user-circle"></i>
+                        <h3>Call with <span id="videoPartnerName">Partner</span></h3>
+                        <p>Voice call is active. Say hello to start!</p>
+                        
+                        <div class="loading-dots">
+                            <div class="dot"></div>
+                            <div class="dot"></div>
+                            <div class="dot"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Call Controls -->
+                <div class="call-controls">
+                    <button class="control-btn mute-btn" id="muteBtn" title="Mute">
+                        <i class="fas fa-microphone"></i>
+                    </button>
+                    <button class="control-btn cut-btn" id="cutBtn" title="End Call">
+                        <i class="fas fa-phone-slash"></i>
+                    </button>
+                    <button class="control-btn skip-btn" id="skipBtn" title="Skip User">
+                        <i class="fas fa-forward"></i>
+                    </button>
+                    <button class="control-btn speaker-btn" id="speakerBtn" title="Speaker">
+                        <i class="fas fa-volume-up"></i>
+                    </button>
+                </div>
+                <audio id="remoteAudio" autoplay></audio>
+            </div>
+            
+            <!-- Floating Call Window -->
+            <div class="floating-call-window" id="floatingCallWindow">
+                <div class="floating-header" id="floatingHeader">
+                    <h3><i class="fas fa-phone-alt"></i> Call</h3>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <div class="floating-timer" id="floatingTimer">00:00</div>
+                        <button class="floating-minimize-btn" id="minimizeFloatingBtn" title="Minimize">
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="floating-body">
+                    <div class="floating-video-placeholder">
+                        <i class="fas fa-user-circle"></i>
+                    </div>
+                    <div class="floating-user-info">
+                        <h4 id="floatingPartnerName">Partner</h4>
+                        <p><span class="flag">🌍</span> <span id="floatingPartnerCountry">Unknown</span></p>
+                    </div>
+                </div>
+                
+                <div class="floating-controls">
+                    <button class="floating-control-btn" id="floatingMuteBtn" title="Mute">
+                        <i class="fas fa-microphone"></i>
+                    </button>
+                    <button class="floating-control-btn end" id="floatingEndBtn" title="End Call">
+                        <i class="fas fa-phone-slash"></i>
+                    </button>
+                    <button class="floating-control-btn" id="floatingSkipBtn" title="Skip">
+                        <i class="fas fa-forward"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="input-area">
+                <input
+                    type="text"
+                    class="message-input"
+                    placeholder="Type your message securely..."
+                    id="messageInput"
+                    disabled
+                >
+                <button class="send-btn" id="sendButton" disabled>
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+
+            <!-- Bottom sheet menu -->
+            <div id="menuModal" class="menu-sheet">
+                <div class="sheet-panel" id="sheetPanel">
+                    <div class="drag-line"></div>
+
+                    <button class="sheet-btn" id="reportUserBtn">Report User</button>
+                    <button class="sheet-btn" id="settingsBtn">Settings</button>
+                    <button class="sheet-btn" id="supportBtn">Help &amp; Support</button>
+                    <button class="sheet-btn exit" id="exitBtn">Exit</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Interests Filter Overlay -->
+        <div class="filter-overlay" id="interestsFilter">
+            <div class="filter-header">
+                <h2 class="filter-title">Select Interests</h2>
+                <button class="close-btn" id="closeFilter">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <p style="margin-bottom: 24px; color: var(--text-light); text-align: center; font-size: 16px;">
+                Choose interests to match with like-minded people
+            </p>
+
+            <div class="interests-grid">
+                <div class="interest-card" data-interest="music">
+                    <div class="interest-text">🎵 Music</div>
+                </div>
+                <div class="interest-card" data-interest="movies">
+                    <div class="interest-text">🎬 Movies</div>
+                </div>
+                <div class="interest-card" data-interest="sports">
+                    <div class="interest-text">⚽ Sports</div>
+                </div>
+                <div class="interest-card" data-interest="travel">
+                    <div class="interest-text">✈️ Travel</div>
+                </div>
+                <div class="interest-card" data-interest="gaming">
+                    <div class="interest-text">🎮 Gaming</div>
+                </div>
+                <div class="interest-card" data-interest="food">
+                    <div class="interest-text">🍕 Food</div>
+                </div>
+                <div class="interest-card" data-interest="tech">
+                    <div class="interest-text">💻 Technology</div>
+                </div>
+                <div class="interest-card" data-interest="art">
+                    <div class="interest-text">🎨 Art</div>
+                </div>
+            </div>
+
+            <button class="primary-btn" id="applyInterests">
+                <i class="fas fa-check"></i> Apply Interests
+            </button>
+        </div>
+    </div>
+    <div id="toastContainer"></div>
+    <!-- Main client script -->
+    <script src="/app.js"></script>
+</body>
+</html>

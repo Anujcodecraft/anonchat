@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StrangerCall | Random Video Chat</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Fixed Header -->
+    <header class="main-header">
+        <div class="logo">
+            <div class="logo-icon">
+                <i class="fas fa-phone-alt"></i>
+            </div>
+            <div class="logo-text">
+                <h1>StrangerCall</h1>
+                <p>Random video chat</p>
+            </div>
+        </div>
+        
+        <div class="header-actions">
+            <button class="header-btn" id="settingsBtn" title="Settings">
+                <i class="fas fa-cog"></i>
+            </button>
+        </div>
+    </header>
+    
+    <!-- Compact Setup Page -->
+    <div class="container">
+        <div class="setup-page" id="setupPage">
+            <div class="setup-container">
+                <h2 class="setup-title">Start Random Call</h2>
+                <p class="setup-subtitle">Connect with people worldwide in seconds</p>
+                
+                <!-- Username -->
+                <div class="input-group">
+                    <label class="input-label" for="username">
+                        <i class="fas fa-user"></i>
+                        Username
+                    </label>
+                    <input type="text" id="username" class="input-field" placeholder="Enter nickname" maxlength="15">
+                </div>
+                
+                <!-- Your Gender -->
+                <div class="gender-section">
+                    <label class="input-label">
+                        <i class="fas fa-user-circle"></i>
+                        Your Gender
+                    </label>
+                    <div class="gender-grid">
+                        <div class="gender-card" data-gender="male">
+                            <div class="gender-icon male-icon">
+                                <i class="fas fa-mars"></i>
+                            </div>
+                            <div class="gender-name">Male</div>
+                        </div>
+                        <div class="gender-card" data-gender="female">
+                            <div class="gender-icon female-icon">
+                                <i class="fas fa-venus"></i>
+                            </div>
+                            <div class="gender-name">Female</div>
+                        </div>
+                        <div class="gender-card" data-gender="other">
+                            <div class="gender-icon both-icon">
+                                <i class="fas fa-genderless"></i>
+                            </div>
+                            <div class="gender-name">Other</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Partner Gender -->
+                <div class="gender-section">
+                    <label class="input-label">
+                        <i class="fas fa-users"></i>
+                        Talk with
+                    </label>
+                    <div class="gender-grid">
+                        <div class="gender-card" data-partnergender="male">
+                            <div class="gender-icon male-icon">
+                                <i class="fas fa-mars"></i>
+                            </div>
+                            <div class="gender-name">Male</div>
+                        </div>
+                        <div class="gender-card" data-partnergender="female">
+                            <div class="gender-icon female-icon">
+                                <i class="fas fa-venus"></i>
+                            </div>
+                            <div class="gender-name">Female</div>
+                        </div>
+                        <div class="gender-card" data-partnergender="any">
+                            <div class="gender-icon both-icon">
+                                <i class="fas fa-user-friends"></i>
+                            </div>
+                            <div class="gender-name">Anyone</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 18+ Age Confirmation -->
+                <div class="age-confirm-container">
+                    <div class="checkbox-container">
+                        <input type="checkbox" id="ageConfirm">
+                        <label for="ageConfirm">I am 18+</label>
+                    </div>
+                    <div class="age-warning">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <span>Age confirmation</span>
+                    </div>
+                </div>
+                
+                <!-- Start Call Button -->
+                <div class="start-btn-container">
+                    <div class="online-count">
+                        <i class="fas fa-users"></i>
+                        <span id="onlineCount">12,450 online</span>
+                    </div>
+                    
+                    <button class="btn btn-primary" id="startCall">
+                        <i class="fas fa-play-circle"></i> Start Random Call
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Call Page -->
+        <div class="call-page" id="callPage">
+            <div class="full-call-view">
+                <div class="call-header">
+                    <div class="call-user-info">
+                        <div class="call-avatar" id="callAvatar">A</div>
+                        <div class="call-user-details">
+                            <h3 id="callPartnerName">Ajay</h3>
+                            <div class="call-user-location">
+                                <span class="flag">🇮🇳</span>
+                                <span id="callPartnerCountry">India</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="call-status">
+                        <div class="call-timer">
+                            <span id="callTimer">00:04</span>
+                            <button class="call-minimize-btn" id="callMinimizeBtn" title="Minimize">
+                                <i class="fas fa-window-minimize"></i>
+                            </button>
+                        </div>
+                        <div class="status-badge">CONNECTED</div>
+                    </div>
+                </div>
+                
+                <!-- Video Container -->
+                <div class="video-container">
+                    <div class="video-placeholder">
+                        <i class="fas fa-user-circle"></i>
+                        <h3>Call with <span id="videoPartnerName">Ajay</span></h3>
+                        <p>Video call is active. Say hello to start!</p>
+                        
+                        <div class="loading-dots">
+                            <div class="dot"></div>
+                            <div class="dot"></div>
+                            <div class="dot"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Call Controls -->
+                <div class="call-controls">
+                    <button class="control-btn mute-btn" id="muteBtn" title="Mute">
+                        <i class="fas fa-microphone"></i>
+                    </button>
+                    <button class="control-btn cut-btn" id="cutBtn" title="End Call">
+                        <i class="fas fa-phone-slash"></i>
+                    </button>
+                    <button class="control-btn skip-btn" id="skipBtn" title="Skip User">
+                        <i class="fas fa-forward"></i>
+                    </button>
+                    <button class="control-btn speaker-btn" id="speakerBtn" title="Speaker">
+                        <i class="fas fa-volume-up"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Floating Call Window -->
+        <div class="floating-call-window" id="floatingCallWindow">
+            <div class="floating-header" id="floatingHeader">
+                <h3><i class="fas fa-phone-alt"></i> Call</h3>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <div class="floating-timer" id="floatingTimer">00:04</div>
+                    <button class="floating-minimize-btn" id="minimizeFloatingBtn" title="Minimize">
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="floating-body">
+                <div class="floating-video-placeholder">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <div class="floating-user-info">
+                    <h4 id="floatingPartnerName">Ajay</h4>
+                    <p><span class="flag">🇮🇳</span> <span id="floatingPartnerCountry">India</span></p>
+                </div>
+            </div>
+            
+            <div class="floating-controls">
+                <button class="floating-control-btn" id="floatingMuteBtn" title="Mute">
+                    <i class="fas fa-microphone"></i>
+                </button>
+                <button class="floating-control-btn end" id="floatingEndBtn" title="End Call">
+                    <i class="fas fa-phone-slash"></i>
+                </button>
+                <button class="floating-control-btn" id="floatingSkipBtn" title="Skip">
+                    <i class="fas fa-forward"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // DOM Elements
+        const setupPage = document.getElementById('setupPage');
+        const callPage = document.getElementById('callPage');
+        const floatingCallWindow = document.getElementById('floatingCallWindow');
+        
+        // Setup Elements
+        const usernameInput = document.getElementById('username');
+        const genderCards = document.querySelectorAll('.gender-card[data-gender]');
+        const partnerGenderCards = document.querySelectorAll('.gender-card[data-partnergender]');
+        const ageConfirmCheckbox = document.getElementById('ageConfirm');
+        const startCallBtn = document.getElementById('startCall');
+        const onlineCount = document.getElementById('onlineCount');
+        
+        // Call Elements
+        const callPartnerName = document.getElementById('callPartnerName');
+        const callPartnerCountry = document.getElementById('callPartnerCountry');
+        const callAvatar = document.getElementById('callAvatar');
+        const callTimer = document.getElementById('callTimer');
+        const videoPartnerName = document.getElementById('videoPartnerName');
+        const floatingPartnerName = document.getElementById('floatingPartnerName');
+        const floatingPartnerCountry = document.getElementById('floatingPartnerCountry');
+        const floatingTimer = document.getElementById('floatingTimer');
+        
+        // Control buttons
+        const muteBtn = document.getElementById('muteBtn');
+        const cutBtn = document.getElementById('cutBtn');
+        const skipBtn = document.getElementById('skipBtn');
+        const speakerBtn = document.getElementById('speakerBtn');
+        const callMinimizeBtn = document.getElementById('callMinimizeBtn');
+        
+        // Floating window controls
+        const floatingMuteBtn = document.getElementById('floatingMuteBtn');
+        const floatingEndBtn = document.getElementById('floatingEndBtn');
+        const floatingSkipBtn = document.getElementById('floatingSkipBtn');
+        const minimizeFloatingBtn = document.getElementById('minimizeFloatingBtn');
+        const floatingHeader = document.getElementById('floatingHeader');
+        
+        // Header buttons
+        const settingsBtn = document.getElementById('settingsBtn');
+        
+        // State variables
+        let userData = {
+            username: '',
+            gender: '',
+            partnerGender: '',
+            ageConfirmed: false
+        };
+        
+        // Call timer variables
+        let callSeconds = 4;
+        let timerInterval = null;
+        let isMuted = false;
+        let isSpeakerOn = true;
+        let isFloatingMinimized = false;
+        
+        // Dragging variables for floating window
+        let isDragging = false;
+        let dragOffsetX = 0;
+        let dragOffsetY = 0;
+        let floatingWindowPos = { x: 30, y: 90 };
+        let animationFrameId = null;
+        
+        // Partner data for demo
+        const partners = [
+            { name: 'Ajay', country: 'India', flag: '🇮🇳', gender: 'male' },
+            { name: 'Emma', country: 'USA', flag: '🇺🇸', gender: 'female' },
+            { name: 'Carlos', country: 'Spain', flag: '🇪🇸', gender: 'male' },
+            { name: 'Sophie', country: 'France', flag: '🇫🇷', gender: 'female' },
+            { name: 'Kenji', country: 'Japan', flag: '🇯🇵', gender: 'male' },
+            { name: 'Maria', country: 'Brazil', flag: '🇧🇷', gender: 'female' }
+        ];
+        
+        // Initialize the app
+        function init() {
+            setupEventListeners();
+            updateOnlineCount();
+            
+            // Set default selections
+            if (genderCards.length > 0) {
+                genderCards[0].classList.add('selected');
+                userData.gender = genderCards[0].getAttribute('data-gender');
+            }
+            
+            if (partnerGenderCards.length > 0) {
+                partnerGenderCards[2].classList.add('selected');
+                userData.partnerGender = partnerGenderCards[2].getAttribute('data-partnergender');
+            }
+        }
+        
+        // Show setup page
+        function showSetupPage() {
+            setupPage.style.display = 'flex';
+            callPage.classList.remove('active');
+            floatingCallWindow.classList.remove('active');
+            isFloatingMinimized = false;
+            
+            // Stop timer if running
+            if (timerInterval) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+            }
+        }
+        
+        // Show call page (full screen)
+        function showCallPage() {
+            if (!validateSetup()) {
+                return;
+            }
+            
+            setupPage.style.display = 'none';
+            callPage.classList.add('active');
+            floatingCallWindow.classList.remove('active');
+            isFloatingMinimized = false;
+            
+            // Start call timer
+            startCallTimer();
+            
+            // Set random partner
+            setRandomPartner();
+        }
+        
+        // Validate setup before starting call
+        function validateSetup() {
+            if (!usernameInput.value.trim()) {
+                alert('Please enter a username');
+                usernameInput.focus();
+                return false;
+            }
+            
+            if (!userData.gender) {
+                alert('Please select your gender');
+                return false;
+            }
+            
+            if (!userData.partnerGender) {
+                alert('Please select the gender of your chat partner');
+                return false;
+            }
+            
+            if (!ageConfirmCheckbox.checked) {
+                alert('You must confirm that you are 18 years or older to continue');
+                return false;
+            }
+            
+            // Save user data
+            userData.username = usernameInput.value.trim();
+            userData.ageConfirmed = true;
+            
+            return true;
+        }
+        
+        // Minimize call to floating window
+        function minimizeToFloating() {
+            callPage.classList.remove('active');
+            floatingCallWindow.classList.add('active');
+            isFloatingMinimized = false;
+            floatingCallWindow.classList.remove('minimized');
+            
+            // Position floating window
+            floatingCallWindow.style.left = `${floatingWindowPos.x}px`;
+            floatingCallWindow.style.top = `${floatingWindowPos.y}px`;
+            floatingCallWindow.style.right = 'auto';
+        }
+        
+        // Toggle floating window minimized state
+        function toggleFloatingMinimize() {
+            isFloatingMinimized = !isFloatingMinimized;
+            
+            if (isFloatingMinimized) {
+                floatingCallWindow.classList.add('minimized');
+                // Save current position
+                const rect = floatingCallWindow.getBoundingClientRect();
+                floatingWindowPos.x = rect.left;
+                floatingWindowPos.y = rect.top;
+            } else {
+                floatingCallWindow.classList.remove('minimized');
+            }
+        }
+        
+        // Restore from minimized floating window (when clicked anywhere)
+        function restoreFromFloating() {
+            if (isFloatingMinimized) {
+                // Restore to normal floating window
+                floatingCallWindow.classList.remove('minimized');
+                isFloatingMinimized = false;
+            }
+        }
+        
+        // Start call timer
+        function startCallTimer() {
+            callSeconds = 4;
+            updateTimerDisplay();
+            
+            // Start timer
+            if (timerInterval) clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                callSeconds++;
+                updateTimerDisplay();
+            }, 1000);
+        }
+        
+        // Update the call timer display
+        function updateTimerDisplay() {
+            const minutes = Math.floor(callSeconds / 60).toString().padStart(2, '0');
+            const seconds = (callSeconds % 60).toString().padStart(2, '0');
+            const timeString = `${minutes}:${seconds}`;
+            
+            callTimer.textContent = timeString;
+            floatingTimer.textContent = timeString;
+        }
+        
+        // Set a random partner based on user preference
+        function setRandomPartner() {
+            let filteredPartners = partners;
+            
+            // Filter by gender preference if not "any"
+            if (userData.partnerGender !== 'any') {
+                filteredPartners = partners.filter(p => p.gender === userData.partnerGender);
+            }
+            
+            // If no partners match the filter, use all partners
+            if (filteredPartners.length === 0) {
+                filteredPartners = partners;
+            }
+            
+            // Pick a random partner
+            const randomPartner = filteredPartners[Math.floor(Math.random() * filteredPartners.length)];
+            
+            // Update UI
+            callPartnerName.textContent = randomPartner.name;
+            callPartnerCountry.textContent = randomPartner.country;
+            videoPartnerName.textContent = randomPartner.name;
+            floatingPartnerName.textContent = randomPartner.name;
+            floatingPartnerCountry.textContent = randomPartner.country;
+            
+            // Update avatar initial
+            callAvatar.textContent = randomPartner.name.charAt(0);
+            
+            // Update flag emoji
+            const flagElements = document.querySelectorAll('.flag');
+            flagElements.forEach(el => {
+                el.textContent = randomPartner.flag;
+            });
+        }
+        
+        // Update online user count with random number
+        function updateOnlineCount() {
+            const randomCount = Math.floor(Math.random() * 5000) + 10000;
+            const formattedCount = randomCount.toLocaleString();
+            onlineCount.textContent = `${formattedCount} online`;
+        }
+        
+        // Setup floating window drag functionality with smooth animation
+        function setupFloatingWindowDrag() {
+            floatingHeader.addEventListener('mousedown', startDrag);
+            document.addEventListener('mousemove', drag);
+            document.addEventListener('mouseup', stopDrag);
+            
+            // Touch events for mobile
+            floatingHeader.addEventListener('touchstart', startDragTouch);
+            document.addEventListener('touchmove', dragTouch);
+            document.addEventListener('touchend', stopDrag);
+            
+            // Click on minimized window to restore
+            floatingCallWindow.addEventListener('click', (e) => {
+                if (isFloatingMinimized && !e.target.closest('.floating-minimize-btn')) {
+                    restoreFromFloating();
+                }
+            });
+        }
+        
+        function startDrag(e) {
+            if (isFloatingMinimized) return;
+            
+            isDragging = true;
+            const rect = floatingCallWindow.getBoundingClientRect();
+            dragOffsetX = e.clientX - rect.left;
+            dragOffsetY = e.clientY - rect.top;
+            floatingCallWindow.style.cursor = 'grabbing';
+            floatingCallWindow.style.transition = 'none';
+            e.preventDefault();
+            
+            // Cancel any animation frame
+            if (animationFrameId) {
+                cancelAnimationFrame(animationFrameId);
+            }
+        }
+        
+        function startDragTouch(e) {
+            if (isFloatingMinimized) return;
+            
+            isDragging = true;
+            const touch = e.touches[0];
+            const rect = floatingCallWindow.getBoundingClientRect();
+            dragOffsetX = touch.clientX - rect.left;
+            dragOffsetY = touch.clientY - rect.top;
+            floatingCallWindow.style.transition = 'none';
+            e.preventDefault();
+            
+            // Cancel any animation frame
+            if (animationFrameId) {
+                cancelAnimationFrame(animationFrameId);
+            }
+        }
+        
+        function drag(e) {
+            if (!isDragging) return;
+            
+            // Use requestAnimationFrame for smooth dragging
+            animationFrameId = requestAnimationFrame(() => {
+                let x = e.clientX - dragOffsetX;
+                let y = e.clientY - dragOffsetY;
+                
+                // Constrain to viewport with 20px margin from header
+                const headerHeight = 70; // Header height
+                const marginFromHeader = 20;
+                const minY = headerHeight + marginFromHeader;
+                const maxX = window.innerWidth - floatingCallWindow.offsetWidth;
+                const maxY = window.innerHeight - floatingCallWindow.offsetHeight;
+                
+                x = Math.max(0, Math.min(x, maxX));
+                y = Math.max(minY, Math.min(y, maxY));
+                
+                floatingCallWindow.style.left = `${x}px`;
+                floatingCallWindow.style.top = `${y}px`;
+                floatingCallWindow.style.right = 'auto';
+                
+                // Save position
+                floatingWindowPos.x = x;
+                floatingWindowPos.y = y;
+            });
+        }
+        
+        function dragTouch(e) {
+            if (!isDragging) return;
+            
+            const touch = e.touches[0];
+            
+            // Use requestAnimationFrame for smooth dragging
+            animationFrameId = requestAnimationFrame(() => {
+                let x = touch.clientX - dragOffsetX;
+                let y = touch.clientY - dragOffsetY;
+                
+                // Constrain to viewport with 20px margin from header
+                const headerHeight = 70; // Header height
+                const marginFromHeader = 20;
+                const minY = headerHeight + marginFromHeader;
+                const maxX = window.innerWidth - floatingCallWindow.offsetWidth;
+                const maxY = window.innerHeight - floatingCallWindow.offsetHeight;
+                
+                x = Math.max(0, Math.min(x, maxX));
+                y = Math.max(minY, Math.min(y, maxY));
+                
+                floatingCallWindow.style.left = `${x}px`;
+                floatingCallWindow.style.top = `${y}px`;
+                floatingCallWindow.style.right = 'auto';
+                
+                // Save position
+                floatingWindowPos.x = x;
+                floatingWindowPos.y = y;
+            });
+        }
+        
+        function stopDrag() {
+            isDragging = false;
+            floatingCallWindow.style.cursor = 'grab';
+            floatingCallWindow.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+            
+            // Cancel animation frame
+            if (animationFrameId) {
+                cancelAnimationFrame(animationFrameId);
+                animationFrameId = null;
+            }
+        }
+        
+        // Setup all event listeners
+        function setupEventListeners() {
+            // Start call button
+            startCallBtn.addEventListener('click', showCallPage);
+            
+            // Gender selection
+            genderCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    const genderType = card.getAttribute('data-gender');
+                    if (genderType) {
+                        genderCards.forEach(c => c.classList.remove('selected'));
+                        card.classList.add('selected');
+                        userData.gender = genderType;
+                    }
+                });
+            });
+            
+            // Partner gender selection
+            partnerGenderCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    const partnerGenderType = card.getAttribute('data-partnergender');
+                    if (partnerGenderType) {
+                        partnerGenderCards.forEach(c => c.classList.remove('selected'));
+                        card.classList.add('selected');
+                        userData.partnerGender = partnerGenderType;
+                    }
+                });
+            });
+            
+            // Call control buttons
+            muteBtn.addEventListener('click', () => {
+                isMuted = !isMuted;
+                muteBtn.innerHTML = isMuted ? '<i class="fas fa-microphone-slash"></i>' : '<i class="fas fa-microphone"></i>';
+                floatingMuteBtn.innerHTML = isMuted ? '<i class="fas fa-microphone-slash"></i>' : '<i class="fas fa-microphone"></i>';
+            });
+            
+            floatingMuteBtn.addEventListener('click', () => {
+                isMuted = !isMuted;
+                muteBtn.innerHTML = isMuted ? '<i class="fas fa-microphone-slash"></i>' : '<i class="fas fa-microphone"></i>';
+                floatingMuteBtn.innerHTML = isMuted ? '<i class="fas fa-microphone-slash"></i>' : '<i class="fas fa-microphone"></i>';
+            });
+            
+            cutBtn.addEventListener('click', () => {
+                // End call and go back to setup
+                showSetupPage();
+            });
+            
+            floatingEndBtn.addEventListener('click', () => {
+                // End call and go back to setup
+                showSetupPage();
+            });
+            
+            skipBtn.addEventListener('click', () => {
+                // Skip to a new partner
+                setRandomPartner();
+                // Reset timer
+                callSeconds = 0;
+                updateTimerDisplay();
+            });
+            
+            floatingSkipBtn.addEventListener('click', () => {
+                // Skip to a new partner
+                setRandomPartner();
+                // Reset timer
+                callSeconds = 0;
+                updateTimerDisplay();
+            });
+            
+            speakerBtn.addEventListener('click', () => {
+                isSpeakerOn = !isSpeakerOn;
+                speakerBtn.innerHTML = isSpeakerOn ? '<i class="fas fa-volume-up"></i>' : '<i class="fas fa-volume-mute"></i>';
+            });
+            
+            // Minimize buttons
+            callMinimizeBtn.addEventListener('click', minimizeToFloating);
+            minimizeFloatingBtn.addEventListener('click', toggleFloatingMinimize);
+            
+            // Click on minimized floating window to restore
+            floatingCallWindow.addEventListener('click', (e) => {
+                if (isFloatingMinimized && !e.target.closest('.floating-minimize-btn')) {
+                    restoreFromFloating();
+                }
+            });
+            
+            // Settings button
+            settingsBtn.addEventListener('click', () => {
+                alert('Settings would open here');
+            });
+            
+            // Enter key on username field
+            usernameInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    showCallPage();
+                }
+            });
+            
+            // Update online count every 30 seconds
+            setInterval(updateOnlineCount, 30000);
+            
+            // Setup floating window drag with smooth animation
+            setupFloatingWindowDrag();
+        }
+        
+        // Initialize the app
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>

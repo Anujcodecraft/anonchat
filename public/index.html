@@ -1,0 +1,58 @@
+
+
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width,initial-scale=1" />
+	<title>AnonChat — Start</title>
+	<link rel="stylesheet" href="/style.css">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+	<meta name="theme-color" content="#764ba2">
+</head>
+<body>
+	<div class="particles" aria-hidden="true"></div>
+	<main class="app-container" role="main">
+		<section class="page active">
+			<div class="page-content">
+				<div class="welcome-animation" aria-hidden="true">
+					<div class="pulse-ring"></div>
+					<div class="pulse-ring"></div>
+					<div class="pulse-ring"></div>
+					<div class="logo-center"><i class="fa-solid fa-comment"></i></div>
+				</div>
+
+				<h1 class="page-title">AnonChat</h1>
+				<p class="page-subtitle">Connect instantly with strangers — choose voice Call or Chat text-only. No sign-up required.</p>
+
+				<div class="selection-container">
+					<div class="selection-group">
+						<div class="cards-grid" style="grid-template-columns: 1fr 1fr; gap:16px;">
+							<a href="/call" class="card choice" style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:28px;border-radius:16px;background:linear-gradient(135deg,var(--primary),var(--secondary));color:white;text-decoration:none;box-shadow:var(--card-shadow);">
+								<i class="fa-solid fa-phone" style="font-size:28px;margin-bottom:8px;"></i>
+								<div style="font-weight:700;font-size:18px;">Call</div>
+								<div style="font-size:12px;opacity:0.9;margin-top:6px;">Voice match & chat</div>
+							</a>
+
+							<a href="/chat" class="card choice" style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:28px;border-radius:16px;background:linear-gradient(135deg,#fff,#fff);color:var(--text);text-decoration:none;box-shadow:var(--card-shadow);border:1px solid rgba(0,0,0,0.04);">
+								<i class="fa-solid fa-comments" style="font-size:28px;margin-bottom:8px;color:var(--primary);"></i>
+								<div style="font-weight:700;font-size:18px;">Chat</div>
+								<div style="font-size:12px;opacity:0.9;margin-top:6px;">Text match & chat</div>
+							</a>
+						</div>
+					</div>
+				</div>
+
+				<footer style="margin-top:auto;padding:18px 8px 24px;text-align:center;color:var(--text-light);font-size:13px;">
+					<div>Connect comfortably, speak with confidence, listen with ease, your voice matters here, every conversation begins with respect and care.</div>
+				</footer>
+			</div>
+		</section>
+	</main>
+</body>
+</html>
+
+

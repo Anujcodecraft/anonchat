@@ -1,0 +1,1302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AnonChat Pro | Premium Anonymous Chat</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <style>
+        * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+}
+
+:root {
+    --primary: #8B5CF6;
+    --primary-light: #A78BFA;
+    --primary-dark: #7C3AED;
+    --secondary: #EC4899;
+    --secondary-light: #F472B6;
+    --background: #6B5BA3;
+    --card-bg: rgba(255, 255, 255, 0.95);
+    --card-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+    --text: #1F2937;
+    --text-light: #6B7280;
+    --text-white: #FFFFFF;
+    --success: #10B981;
+    --warning: #F59E0B;
+    --danger: #EF4444;
+    --border-radius: 24px;
+    --border-radius-lg: 32px;
+    --border-radius-xl: 48px;
+    --transition: all 0.3s ease;
+    --transition-fast: all 0.2s ease;
+    --input-height: 90px;
+}
+
+body {
+    background: var(--background);
+    color: var(--text);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(var(--vh, 1vh) * 100);
+    position: relative;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Main App Container */
+.app-container {
+    width: 100%;
+    max-width: 480px;
+    height: calc(var(--vh, 1vh) * 100 - 20px);
+    max-height: calc(var(--vh, 1vh) * 100 - 20px);
+    background: var(--card-bg);
+    border-radius: var(--border-radius-lg);
+    overflow: hidden;
+    box-shadow: var(--card-shadow);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Page System */
+.page {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    opacity: 0;
+    pointer-events: none;
+    transition: var(--transition);
+    z-index: 1;
+    background: transparent;
+    backdrop-filter: blur(10px);
+}
+
+.page.active {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: all;
+    z-index: 2;
+}
+
+.page-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 20px 0;
+}
+
+/* Page 1: Welcome Screen */
+.welcome-animation {
+    position: relative;
+    width: 180px;
+    height: 180px;
+    margin: 0 auto 40px;
+}
+
+.logo-center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 120px;
+    height: 120px;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 20px 40px rgba(139, 92, 246, 0.4);
+}
+
+.logo-center i {
+    font-size: 48px;
+    color: white;
+}
+
+.page-title {
+    font-size: 42px;
+    font-weight: 800;
+    margin-bottom: 20px;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    letter-spacing: -1px;
+    line-height: 1.1;
+    position: relative;
+    display: inline-block;
+}
+
+.page-title::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 4px;
+    background: linear-gradient(90deg, var(--primary), var(--secondary));
+    border-radius: 2px;
+}
+
+.page-subtitle {
+    font-size: 18px;
+    color: var(--text-light);
+    line-height: 1.6;
+    margin-bottom: 40px;
+    max-width: 320px;
+    font-weight: 400;
+}
+
+/* Selection Cards */
+.selection-container {
+    width: 100%;
+    max-width: 400px;
+    padding: 30px;
+    margin: 0 auto;
+}
+
+.selection-group {
+    margin-bottom: 32px;
+}
+
+.selection-label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-light);
+    margin-bottom: 16px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-align: center;
+}
+
+.cards-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+
+.selection-card {
+    background: rgba(255, 255, 255, 0.9);
+    border: 2px solid rgba(139, 92, 246, 0.1);
+    border-radius: var(--border-radius);
+    padding: 24px 12px;
+    cursor: pointer;
+    transition: var(--transition-fast);
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+    backdrop-filter: blur(10px);
+}
+
+.selection-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--primary-light);
+    box-shadow: 0 15px 30px rgba(139, 92, 246, 0.2);
+}
+
+.selection-card.active {
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    border-color: transparent;
+    transform: translateY(-3px);
+    box-shadow: 0 20px 40px rgba(139, 92, 246, 0.4);
+}
+
+.selection-card.active .card-label {
+    color: white;
+}
+
+.selection-card.active .card-icon {
+    color: white;
+    transform: scale(1.1);
+}
+
+.card-icon {
+    font-size: 28px;
+    margin-bottom: 12px;
+    color: var(--primary);
+    transition: var(--transition-fast);
+}
+
+.card-label {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text);
+    transition: var(--transition-fast);
+}
+
+/* Age Check */
+.age-check {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin: 40px 0;
+    padding: 24px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: var(--border-radius);
+    border: 2px solid rgba(139, 92, 246, 0.1);
+    backdrop-filter: blur(10px);
+}
+
+.checkbox-custom {
+    position: relative;
+    width: 28px;
+    height: 28px;
+    flex-shrink: 0;
+}
+
+.checkbox-custom input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.checkbox-design {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: white;
+    border-radius: 8px;
+    border: 2px solid rgba(139, 92, 246, 0.3);
+    transition: var(--transition-fast);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.checkbox-custom input:checked ~ .checkbox-design {
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    border-color: transparent;
+    transform: scale(1.1);
+}
+
+.checkbox-design i {
+    color: white;
+    font-size: 16px;
+    opacity: 0;
+    transform: scale(0);
+    transition: var(--transition-fast);
+}
+
+.checkbox-custom input:checked ~ .checkbox-design i {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.age-text {
+    font-size: 16px;
+    color: var(--text);
+    font-weight: 500;
+}
+
+/* Primary Button */
+.primary-btn {
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    color: white;
+    border: none;
+    padding: 22px 40px;
+    border-radius: var(--border-radius);
+    font-size: 18px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: var(--transition-fast);
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 15px 30px rgba(139, 92, 246, 0.3);
+}
+
+.primary-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 20px 40px rgba(139, 92, 246, 0.4);
+}
+
+.primary-btn:disabled {
+    background: rgba(139, 92, 246, 0.2);
+    color: rgba(139, 92, 246, 0.5);
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* Progress Dots */
+.progress-dots {
+    display: flex;
+    gap: 12px;
+    margin-top: 40px;
+}
+
+.dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: rgba(139, 92, 246, 0.2);
+    transition: var(--transition-fast);
+}
+
+.dot.active {
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    transform: scale(1.1);
+    box-shadow: 0 0 15px rgba(139, 92, 246, 0.5);
+}
+
+/* Page 2: Security Features */
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+    margin: 40px 0;
+    width: 100%;
+    max-width: 400px;
+}
+
+.feature-item {
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: var(--border-radius);
+    padding: 30px 20px;
+    text-align: center;
+    border: 2px solid rgba(139, 92, 246, 0.1);
+    transition: var(--transition-fast);
+    backdrop-filter: blur(10px);
+}
+
+.feature-item:hover {
+    transform: translateY(-5px);
+    border-color: var(--primary-light);
+    box-shadow: 0 20px 40px rgba(139, 92, 246, 0.2);
+}
+
+.feature-icon {
+    width: 70px;
+    height: 70px;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    box-shadow: 0 15px 30px rgba(139, 92, 246, 0.3);
+}
+
+.feature-icon i {
+    font-size: 28px;
+    color: white;
+}
+
+.feature-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 8px;
+}
+
+.feature-desc {
+    font-size: 14px;
+    color: var(--text-light);
+    line-height: 1.4;
+}
+
+/* Page 3: Chat Interface */
+.chat-header {
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    padding: 24px 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 0 0 var(--border-radius) var(--border-radius);
+    box-shadow: 0 10px 30px rgba(139, 92, 246, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.chat-logo {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    position: relative;
+    z-index: 1;
+}
+
+.logo-badge {
+    width: 48px;
+    height: 48px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.logo-badge i {
+    font-size: 24px;
+    color: white;
+}
+
+.logo-text {
+    font-size: 24px;
+    font-weight: 800;
+    color: white;
+    letter-spacing: 0.5px;
+}
+
+.header-actions {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+}
+
+.icon-btn {
+    width: 44px;
+    height: 44px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    cursor: pointer;
+    transition: var(--transition-fast);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(10px);
+}
+
+.icon-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.05);
+}
+
+/* Chat Area */
+.chat-area {
+    flex: 1;
+    padding: 32px;
+    padding-bottom: calc(var(--input-height) + 24px);
+    overflow-y: auto;
+    background: rgba(248, 250, 252, 0.5);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    position: relative;
+}
+
+.message {
+    max-width: 80%;
+    padding: 20px 24px;
+    border-radius: 28px;
+    position: relative;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+    word-wrap: break-word;
+    line-height: 1.5;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.message.received {
+    align-self: flex-start;
+    background: rgba(255, 255, 255, 0.95);
+    border-bottom-left-radius: 8px;
+}
+
+.message.sent {
+    align-self: flex-end;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    color: white;
+    border-bottom-right-radius: 8px;
+    box-shadow: 0 15px 30px rgba(139, 92, 246, 0.2);
+}
+
+.message-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 12px;
+}
+
+.message-time {
+    font-size: 12px;
+    opacity: 0.7;
+    font-weight: 500;
+}
+
+.message-status {
+    font-size: 12px;
+    margin-left: 8px;
+    opacity: 0.8;
+}
+
+.typing-indicator {
+    display: flex;
+    align-self: flex-start;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 20px 24px;
+    border-radius: 28px;
+    border-bottom-left-radius: 8px;
+    margin-bottom: 5px;
+    width: fit-content;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.typing-text {
+    font-size: 14px;
+    color: var(--text-light);
+    margin-right: 12px;
+    font-weight: 600;
+}
+
+.typing-dots {
+    display: flex;
+    gap: 6px;
+}
+
+.typing-dots span {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--primary);
+    display: block;
+}
+
+/* Input Area */
+.input-area {
+    padding: 16px 20px;
+    background: rgba(255, 255, 255, 0.95);
+    border-top: 1px solid rgba(139, 92, 246, 0.1);
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    position: sticky;
+    bottom: 0;
+    z-index: 60;
+    backdrop-filter: blur(20px);
+    border-radius: 0 0 var(--border-radius) var(--border-radius);
+    height: var(--input-height);
+    box-sizing: border-box;
+}
+
+.skip-btn {
+    width: 46px;
+    position: fixed;
+    z-index: 9999999;
+    touch-action: none;
+    transition: var(--transition-fast);
+    height: 46px;
+    background: var(--danger);
+    border: 2px solid rgba(139, 92, 246, 0.2);
+    border-radius: 50%;
+    color: var(--primary);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.skip-btn:hover {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: white;
+    transform: scale(1.05);
+}
+
+.skip-btn.confirm {
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    border-color: transparent;
+    color: white;
+}
+
+.message-input {
+    flex: 1;
+    padding: 20px 24px;
+    border: none;
+    border-radius: 24px;
+    background: rgba(248, 250, 252, 0.8);
+    color: var(--text);
+    font-size: 16px;
+    outline: none;
+    transition: var(--transition-fast);
+    border: 2px solid rgba(139, 92, 246, 0.1);
+}
+
+.message-input:focus {
+    background: white;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.1);
+}
+
+.message-input::placeholder {
+    color: rgba(139, 92, 246, 0.4);
+    font-weight: 500;
+}
+
+.send-btn {
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    border-radius: 50%;
+    border: none;
+    color: white;
+    cursor: pointer;
+    transition: var(--transition-fast);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 10px 25px rgba(139, 92, 246, 0.3);
+    flex-shrink: 0;
+}
+
+.send-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 15px 30px rgba(139, 92, 246, 0.4);
+}
+
+/* Interests Filter */
+.filter-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(20px);
+    z-index: 30;
+    display: flex;
+    flex-direction: column;
+    padding: 40px;
+    opacity: 0;
+    transform: translateY(100%);
+    transition: var(--transition);
+    border-radius: var(--border-radius-lg);
+}
+
+.filter-overlay.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.filter-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+}
+
+.filter-title {
+    font-size: 32px;
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    letter-spacing: -0.5px;
+}
+
+.close-btn {
+    width: 44px;
+    height: 44px;
+    background: rgba(139, 92, 246, 0.1);
+    border-radius: 50%;
+    border: 2px solid rgba(139, 92, 246, 0.2);
+    color: var(--primary);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition-fast);
+}
+
+.close-btn:hover {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: white;
+    transform: scale(1.05);
+}
+
+.interests-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin-bottom: 32px;
+    flex: 1;
+    overflow-y: auto;
+}
+
+.interest-card {
+    background: rgba(255, 255, 255, 0.9);
+    border: 2px solid rgba(139, 92, 246, 0.1);
+    border-radius: var(--border-radius);
+    padding: 24px 16px;
+    text-align: center;
+    cursor: pointer;
+    transition: var(--transition-fast);
+    position: relative;
+    overflow: hidden;
+}
+
+.interest-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--primary-light);
+    box-shadow: 0 15px 30px rgba(139, 92, 246, 0.2);
+}
+
+.interest-card.active {
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    border-color: transparent;
+    transform: translateY(-3px);
+    box-shadow: 0 20px 40px rgba(139, 92, 246, 0.3);
+}
+
+.interest-card.active .interest-text {
+    color: white;
+}
+
+.interest-text {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text);
+    transition: var(--transition-fast);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .app-container {
+        height: 95vh;
+        max-height: none;
+        border-radius: var(--border-radius);
+    }
+
+    .page-title {
+        font-size: 36px;
+    }
+
+    .features-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .cards-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .selection-card {
+        padding: 20px 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        padding: 0;
+    }
+
+    .app-container {
+        height: 100vh;
+        border-radius: 0;
+        max-width: 100%;
+    }
+
+    .page {
+        padding: 0;
+    }
+
+    .welcome-animation {
+        width: 150px;
+        height: 150px;
+    }
+
+    .logo-center {
+        width: 100px;
+        height: 100px;
+    }
+
+    .page-title {
+        font-size: 32px;
+    }
+
+    .primary-btn {
+        padding: 20px 24px;
+        font-size: 16px;
+    }
+
+    .chat-header {
+        padding: 20px 24px;
+    }
+
+    .input-area {
+        padding: 20px 24px;
+    }
+
+    .message {
+        max-width: 85%;
+        padding: 18px 20px;
+    }
+
+    .interests-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Scrollbar */
+.chat-area::-webkit-scrollbar {
+    width: 6px;
+}
+
+.chat-area::-webkit-scrollbar-track {
+    background: rgba(139, 92, 246, 0.05);
+    border-radius: 10px;
+}
+
+.chat-area::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    border-radius: 10px;
+}
+
+/* Hide elements */
+.hidden {
+    display: none;
+}
+
+.menu-sheet {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,.45);
+    display: none;
+    align-items: flex-end;
+    justify-content: center;
+    z-index: 9999999;
+    backdrop-filter: blur(3px);
+}
+
+.sheet-panel {
+    width: 100%;
+    background: #fff;
+    padding: 20px;
+    border-radius: 20px 20px 0 0;
+    transform: translateY(100%);
+    transition: var(--transition);
+    box-shadow: 0 -5px 25px rgba(0,0,0,.15);
+}
+
+.drag-line {
+    width: 45px;
+    height: 5px;
+    background: #ccc;
+    border-radius: 10px;
+    margin: 0 auto 15px;
+}
+
+.sheet-btn {
+    border: none;
+    background: #f1f1f1;
+    width: 100%;
+    text-align: center;
+    padding: 14px;
+    border-radius: 12px;
+    font-size: 16px;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+
+.exit {
+    background: #ff4757;
+    color: #fff;
+}
+    </style>
+</head>
+<body>
+    <!-- Toast Container -->
+    <div id="toastContainer"></div>
+    
+    <!-- Main App Container -->
+    <div class="app-container">
+        <!-- Page 1: Welcome & Selection -->
+        <div class="page active" id="page1">
+            <div class="page-content">
+                <div class="welcome-animation">
+                    <div class="pulse-ring"></div>
+                    <div class="pulse-ring"></div>
+                    <div class="pulse-ring"></div>
+                    <div class="logo-center">
+                        <i class="fas fa-user-secret"></i>
+                    </div>
+                </div>
+                
+                <h1 class="page-title">AnonChat Pro</h1>
+                <p class="page-subtitle">Connect with people around the world anonymously. Your privacy is our priority.</p>
+                
+                <div class="selection-container">
+                    <div class="selection-group">
+                        <span class="selection-label">I want to chat with</span>
+                        <div class="cards-grid">
+                            <div class="selection-card active" data-value="male">
+                                <div class="card-icon">
+                                    <i class="fas fa-mars"></i>
+                                </div>
+                                <div class="card-label">Male</div>
+                            </div>
+                            <div class="selection-card" data-value="female">
+                                <div class="card-icon">
+                                    <i class="fas fa-venus"></i>
+                                </div>
+                                <div class="card-label">Female</div>
+                            </div>
+                            <div class="selection-card" data-value="all">
+                                <div class="card-icon">
+                                    <i class="fas fa-venus-mars"></i>
+                                </div>
+                                <div class="card-label">All</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="selection-group">
+                        <span class="selection-label">I identify as</span>
+                        <div class="cards-grid">
+                            <div class="selection-card active" data-value="guy">
+                                <div class="card-icon">
+                                    <i class="fas fa-male"></i>
+                                </div>
+                                <div class="card-label">Guy</div>
+                            </div>
+                            <div class="selection-card" data-value="girl">
+                                <div class="card-icon">
+                                    <i class="fas fa-female"></i>
+                                </div>
+                                <div class="card-label">Girl</div>
+                            </div>
+                            <div class="selection-card" data-value="xcovert">
+                                <div class="card-icon">
+                                    <i class="fas fa-user-astronaut"></i>
+                                </div>
+                                <div class="card-label">X Covert</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="age-check">
+                    <label class="checkbox-custom">
+                        <input type="checkbox" id="ageCheck">
+                        <div class="checkbox-design">
+                            <i class="fas fa-check"></i>
+                        </div>
+                    </label>
+                    <span class="age-text">I confirm that I am 18 years or older</span>
+                </div>
+                
+                <button class="primary-btn" id="nextButton1" disabled>
+                    <i class="fas fa-arrow-right"></i> Continue to Security
+                </button>
+                
+                <div class="progress-dots">
+                    <div class="dot active"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Page 2: Security Features -->
+        <div class="page" id="page2">
+            <div class="page-content">
+                <div class="welcome-animation">
+                    <div class="pulse-ring"></div>
+                    <div class="pulse-ring"></div>
+                    <div class="pulse-ring"></div>
+                    <div class="logo-center">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                </div>
+                
+                <h1 class="page-title">Your Security First</h1>
+                <p class="page-subtitle">Experience the highest level of privacy and security in anonymous chatting</p>
+                
+                <div class="features-grid">
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <i class="fas fa-lock"></i>
+                        </div>
+                        <h3 class="feature-title">End-to-End Encryption</h3>
+                        <p class="feature-desc">Military grade encryption for all messages</p>
+                    </div>
+                    
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <i class="fas fa-user-secret"></i>
+                        </div>
+                        <h3 class="feature-title">100% Anonymous</h3>
+                        <p class="feature-desc">No personal data stored or shared</p>
+                    </div>
+                    
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <i class="fas fa-globe"></i>
+                        </div>
+                        <h3 class="feature-title">Global Network</h3>
+                        <p class="feature-desc">Connect with people worldwide</p>
+                    </div>
+                    
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <i class="fas fa-bolt"></i>
+                        </div>
+                        <h3 class="feature-title">Instant Connection</h3>
+                        <p class="feature-desc">Find matches in seconds</p>
+                    </div>
+                </div>
+                
+                <button class="primary-btn" id="nextButton2">
+                    <i class="fas fa-comments"></i> Start Chatting Now
+                </button>
+                
+                <div class="progress-dots">
+                    <div class="dot"></div>
+                    <div class="dot active"></div>
+                    <div class="dot"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Page 3: Chat Room -->
+        <div class="page" id="page3">
+            <div class="chat-header">
+                <div class="chat-logo">
+                    <div class="logo-badge">
+                        <i class="fas fa-comment-dots"></i>
+                    </div>
+                    <div class="logo-text">AnonChat Pro</div>
+                </div>
+                
+                <div class="header-actions">
+                    <button class="icon-btn" id="interestsButton" title="Interests">
+                        <i class="fas fa-tags"></i>
+                    </button>
+                    <button class="icon-btn" id="menuButton" title="Menu">
+                        <i class="fas fa-ellipsis-v"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="chat-area" id="chatArea">
+                <div class="message received">
+                    Welcome to AnonChat Pro! Your identity is protected and all messages are encrypted. How can I help you today?
+                    <div class="message-info">
+                        <div class="message-time">10:00 AM</div>
+                    </div>
+                </div>
+                
+                <div class="message sent">
+                    Hi there! Just started using this app and I'm impressed with the beautiful design and privacy features.
+                    <div class="message-info">
+                        <div class="message-time">10:02 AM</div>
+                        <div class="message-status">✓✓</div>
+                    </div>
+                </div>
+                
+                <div class="message received">
+                    Glad you like it! We designed this platform with privacy as the top priority. No data is stored and all conversations are anonymous. What interests you in anonymous chatting?
+                    <div class="message-info">
+                        <div class="message-time">10:03 AM</div>
+                    </div>
+                </div>
+                
+                <div class="typing-indicator">
+                    <span class="typing-text">Stranger is typing</span>
+                    <div class="typing-dots">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </div>
+            </div>
+
+            <button class="skip-btn" id="skipButton" title="Skip conversation">
+                    <i class="fas fa-forward"></i>
+                </button>
+
+            <div class="input-area">
+
+                <input type="text" class="message-input" placeholder="Type your message securely..." id="messageInput">
+                <button class="send-btn" id="sendButton">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+               <div id="menuModal" class="menu-sheet">
+  <div class="sheet-panel" id="sheetPanel">
+
+      <div class="drag-line"></div>
+
+      <button class="sheet-btn" id="reportUserBtn">Report User</button>
+      <button class="sheet-btn" id="settingsBtn">Settings</button>
+      <button class="sheet-btn" id="supportBtn">Help & Support</button>
+
+      <button class="sheet-btn exit" id="exitBtn">Exit</button>
+
+  </div>
+</div>
+        </div>
+
+        <!-- Interests Filter Overlay -->
+        <div class="filter-overlay" id="interestsFilter">
+            <div class="filter-header">
+                <h2 class="filter-title">Select Interests</h2>
+                <button class="close-btn" id="closeFilter">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <p style="margin-bottom: 24px; color: var(--text-light); text-align: center; font-size: 16px;">
+                Choose interests to match with like-minded people
+            </p>
+            
+            <div class="interests-grid">
+                <div class="interest-card" data-interest="music">
+                    <div class="interest-text">🎵 Music</div>
+                </div>
+                <div class="interest-card" data-interest="movies">
+                    <div class="interest-text">🎬 Movies</div>
+                </div>
+                <div class="interest-card" data-interest="sports">
+                    <div class="interest-text">⚽ Sports</div>
+                </div>
+                <div class="interest-card" data-interest="travel">
+                    <div class="interest-text">✈️ Travel</div>
+                </div>
+                <div class="interest-card" data-interest="gaming">
+                    <div class="interest-text">🎮 Gaming</div>
+                </div>
+                <div class="interest-card" data-interest="food">
+                    <div class="interest-text">🍕 Food</div>
+                </div>
+                <div class="interest-card" data-interest="tech">
+                    <div class="interest-text">💻 Technology</div>
+                </div>
+                <div class="interest-card" data-interest="art">
+                    <div class="interest-text">🎨 Art</div>
+                </div>
+            </div>
+            
+            <button class="primary-btn" id="applyInterests">
+                <i class="fas fa-check"></i> Apply Interests
+            </button>
+        </div>
+    </div>
+
+
+
+    <!-- Socket.IO -->
+    <script src="/socket.io/socket.io.js"></script>
+    <!-- Socket connection (initialized automatically) -->
+    <script type="module" src="/app.js"></script>
+    <!-- Chat-specific functionality -->
+    <script type="module" src="/chat/index.js"></script>
+    <script>
+        // Initialize skip button drag functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const bubble = document.getElementById("skipButton");
+            if (!bubble) return;
+
+            let dragging = false;
+            let posX = 50;  
+            let posY = 70;  
+
+            function applyPosition(){
+                bubble.style.left = posX + "%";
+                bubble.style.top  = posY + "%";
+            }
+
+            applyPosition();
+
+            bubble.addEventListener("pointerdown", ()=>{
+                dragging = true;
+                bubble.style.transition = "none";
+            });
+
+            window.addEventListener("pointerup", ()=>{
+                dragging = false;
+
+                // magnetic stick animation
+                bubble.style.transition = ".35s cubic-bezier(.19,1,.22,1)";
+
+                // which side is closer?
+                if(posX < 45){
+                    posX = 5;   // stick left
+                } else {
+                    posX = 85;  // stick right
+                }
+
+                applyPosition();
+            });
+
+            window.addEventListener("pointermove", e=>{
+                if(!dragging) return;
+
+                const w = innerWidth;
+                const h = innerHeight;
+
+                posX = (e.clientX / w) * 100;
+                posY = (e.clientY / h) * 100;
+
+                // clamp to 0–90%
+                posX = Math.min(Math.max(posX, 0), 90);
+                posY = Math.min(Math.max(posY, 0), 90);
+
+                applyPosition();
+            });
+        });
+    </script>
+    <script>
+        (function(){
+            function setVh(){
+                document.documentElement.style.setProperty('--vh', (window.innerHeight * 0.01) + 'px');
+            }
+            setVh();
+            window.addEventListener('resize', setVh);
+        })();
+    </script>
+    <script>
+        (function(){
+            const msgInput = document.getElementById('messageInput');
+            const chatArea = document.getElementById('chatArea');
+            if(!msgInput || !chatArea) return;
+
+            function scrollToBottom(delay = 50){
+                setTimeout(()=>{ chatArea.scrollTop = chatArea.scrollHeight; }, delay);
+            }
+
+            msgInput.addEventListener('focus', ()=> scrollToBottom(300));
+            msgInput.addEventListener('touchstart', ()=> scrollToBottom(300));
+
+            const observer = new MutationObserver(()=> scrollToBottom(50));
+            observer.observe(chatArea, { childList: true, subtree: true });
+        })();
+    </script>
+</body>
+</html>

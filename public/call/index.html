@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StrangerCall | Random Voice Chat</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <!-- Styles moved to /style.css to match new.html visuals -->
+</head>
+<body>
+    <!-- Fixed Header -->
+    <div id="toastContainer"></div>
+    <header class="main-header">
+        <div class="logo">
+            <div class="logo-icon">
+                <i class="fas fa-phone-alt"></i>
+            </div>
+            <div class="logo-text">
+                <h1>StrangerCall</h1>
+                <p>Random Voice chat</p>
+            </div>
+        </div>
+        
+        <div class="header-actions">
+            <button class="header-btn" id="settingsBtn" title="Settings">
+                <i class="fas fa-cog"></i>
+            </button>
+        </div>
+    </header>
+    
+    <!-- Compact Setup Page -->
+    <div class="container">
+        <div class="setup-page page active" id="setupPage">
+            <div class="setup-container">
+                <h2 class="setup-title">Start Random Call</h2>
+                <p class="setup-subtitle">Connect with people worldwide in seconds</p>
+                
+                <!-- Username -->
+                <div class="input-group">
+                    <label class="input-label" for="username">
+                        <i class="fas fa-user"></i>
+                        Username
+                    </label>
+                    <input type="text" id="username" class="input-field" placeholder="Enter nickname" maxlength="15">
+                </div>
+                
+                <!-- Your Gender -->
+                <div class="gender-section">
+                    <label class="input-label">
+                        <i class="fas fa-user-circle"></i>
+                        Your Gender
+                    </label>
+                    <div class="gender-grid">
+                        <div class="gender-card" data-gender="male">
+                            <div class="gender-icon male-icon">
+                                <i class="fas fa-mars"></i>
+                            </div>
+                            <div class="gender-name">Male</div>
+                        </div>
+                        <div class="gender-card" data-gender="female">
+                            <div class="gender-icon female-icon">
+                                <i class="fas fa-venus"></i>
+                            </div>
+                            <div class="gender-name">Female</div>
+                        </div>
+                        <div class="gender-card" data-gender="other">
+                            <div class="gender-icon both-icon">
+                                <i class="fas fa-genderless"></i>
+                            </div>
+                            <div class="gender-name">Other</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Partner Gender -->
+                <div class="gender-section">
+                    <label class="input-label">
+                        <i class="fas fa-users"></i>
+                        Talk with
+                    </label>
+                    <div class="gender-grid">
+                        <div class="gender-card" data-partnergender="male">
+                            <div class="gender-icon male-icon">
+                                <i class="fas fa-mars"></i>
+                            </div>
+                            <div class="gender-name">Male</div>
+                        </div>
+                        <div class="gender-card" data-partnergender="female">
+                            <div class="gender-icon female-icon">
+                                <i class="fas fa-venus"></i>
+                            </div>
+                            <div class="gender-name">Female</div>
+                        </div>
+                        <div class="gender-card" data-partnergender="any">
+                            <div class="gender-icon both-icon">
+                                <i class="fas fa-user-friends"></i>
+                            </div>
+                            <div class="gender-name">Anyone</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 18+ Age Confirmation -->
+                <div class="age-confirm-container">
+                    <div class="checkbox-container">
+                        <input type="checkbox" id="ageConfirm">
+                        <label for="ageConfirm">I am 18+</label>
+                    </div>
+                    <div class="age-warning">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <span>Age confirmation</span>
+                    </div>
+                </div>
+                
+                <!-- Start Call Button -->
+                <div class="start-btn-container">
+                    <div class="online-count">
+                        <i class="fas fa-users"></i>
+                        <span id="onlineCount">190 online</span>
+                    </div>
+                    
+                    <button class="btn btn-primary" id="startCall">
+                        <i class="fas fa-play-circle"></i> Start Random Call
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Call Page -->
+        <div class="call-page page" id="callPage">
+            <div class="full-call-view">
+                <div class="call-header">
+                    <div class="call-user-info">
+                        <div class="call-avatar" id="callAvatar">S</div>
+                        <div class="call-user-details">
+                            <h3 id="callPartnerName">Stranger</h3>
+                            <!-- <div class="call-user-location">
+                                <span class="flag">🌎</span>
+                                <!-- <span id="callPartnerCountry">Connected...</span> -->
+                            <!-- </div> -->
+                        </div>
+                    </div>
+                    
+                    <div class="call-status">
+                        <div class="call-timer">
+                            <span id="callTimer">00:00</span>
+                            <button class="call-minimize-btn" id="callMinimizeBtn" title="Minimize">
+                                <i class="fas fa-window-minimize"></i>
+                            </button>
+                        </div>
+                        <div class="status-badge">CONNECTED</div>
+                    </div>
+                </div>
+                
+                <!-- Video Container -->
+                <div class="video-container">
+                    <!-- Waiting for match container (initially hidden) -->
+                    <div class="waiting-container" style="display: none;">
+                        <div class="waiting-animation">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <h3>Looking for a partner...</h3>
+                        <p id="waitingMessage">Please wait while we connect you with someone.</p>
+                        <div class="loading-dots">
+                            <div class="dot"></div>
+                            <div class="dot"></div>
+                            <div class="dot"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Active call container -->
+                    <div class="video-placeholder" id="videoPlaceholder">
+                        <i class="fas fa-user-circle"></i>
+                        <h3>Call with <span id="videoPartnerName">Stranger</span></h3>
+                        <p>Audio call is active. Say hello to start!</p>
+                        
+                        <div class="online-count-display" style="margin-top: 25px; padding: 12px 20px; background: rgba(139, 92, 246, 0.1); border-radius: 10px; display: inline-block;">
+                            <i class="fas fa-users" style="color: #10B981; margin-right: 8px;"></i>
+                            <span id="connectedOnlineCount">Loading...</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Call Controls -->
+                <div class="call-controls">
+                    <button class="control-btn mute-btn" id="muteBtn" title="Mute">
+                        <i class="fas fa-microphone"></i>
+                    </button>
+                    <button class="control-btn cut-btn" id="cutBtn" title="End Call">
+                        <i class="fas fa-phone-slash"></i>
+                    </button>
+                    <button class="control-btn skip-btn" id="skipBtn" title="Skip User">
+                        <i class="fas fa-forward"></i>
+                    </button>
+                    <button class="control-btn speaker-btn" id="speakerBtn" title="Speaker">
+                        <i class="fas fa-volume-down"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Floating Call Window -->
+        <div class="floating-call-window" id="floatingCallWindow">
+            <div class="floating-header" id="floatingHeader">
+                <h3><i class="fas fa-phone-alt"></i> Call</h3>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <div class="floating-timer" id="floatingTimer">00:00</div>
+                    <button class="floating-minimize-btn" id="minimizeFloatingBtn" title="Minimize">
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="floating-body">
+                <div class="floating-video-placeholder">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <div class="floating-user-info">
+                    <h4 id="floatingPartnerName">Stranger</h4>
+                    <p id="floatingConnectionStatus"><span class="flag">🌎</span> <span id="floatingPartnerCountry">Connected</span></p>
+                </div>
+            </div>
+            
+            <div class="floating-controls">
+                <button class="floating-control-btn" id="floatingMuteBtn" title="Mute">
+                    <i class="fas fa-microphone"></i>
+                </button>
+                <button class="floating-control-btn end" id="floatingEndBtn" title="End Call">
+                    <i class="fas fa-phone-slash"></i>
+                </button>
+                <button class="floating-control-btn" id="floatingSkipBtn" title="Skip">
+                    <i class="fas fa-forward"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hidden audio element for remote audio -->
+    <audio id="remoteAudio" autoplay style="display: none;"></audio>
+
+    <!-- Socket.IO -->
+    <script src="/socket.io/socket.io.js"></script>
+    <!-- Socket connection (initialized automatically) -->
+    <script type="module" src="/app.js"></script>
+    <!-- Call-specific functionality -->
+    <script type="module" src="/call/index.js"></script>
+    <script>
+        (function(){
+            function setVh(){
+                document.documentElement.style.setProperty('--vh', (window.innerHeight * 0.01) + 'px');
+            }
+            setVh();
+            window.addEventListener('resize', setVh);
+        })();
+    </script>
+</body>
+</html>
